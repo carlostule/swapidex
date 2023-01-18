@@ -1,5 +1,6 @@
 import CategoryCard from './Card/CategoryCard'
-import Tabledex from './Tabledex/TableDex'
+import CharacterForm from './CharacterForm/CharacterForm'
 import Spinner from './Spinner/Spinner'
+import Tabledex from './Tabledex/TableDex'
 
-export { CategoryCard, Tabledex, Spinner }
+export { CategoryCard, CharacterForm, Spinner, Tabledex }
