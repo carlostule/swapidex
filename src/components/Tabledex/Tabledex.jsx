@@ -1,24 +1,20 @@
-import { List, Skeleton, Avatar } from 'antd'
+import { List, Avatar } from 'antd'
+import { isMobile } from 'react-device-detect'
 
 import { RED_COLOR, WHITE_COLOR } from '../../global/GlobalVars'
 
-import useBreakpoint from '../../hooks/useBreakpoint'
 
 const Tabledex = ({
   data = [],
   dbCharacters = [],
-  loading = false,
   handleInfo = () => {},
   handleUpdateInfo = () => {},
   handleAddInfo = () => {},
   handleDeleteInfo = () => {},
   notificationInfo = () => {},
-}) => {
-  const breakpoint = useBreakpoint()
-
-  return (
+}) => (
     <List
-      itemLayout={breakpoint > 880 ? 'horizontal' : 'vertical'}
+      itemLayout={!isMobile ? 'horizontal' : 'vertical'}
       bordered={true}
       dataSource={data}
       style={{ backgroundColor: WHITE_COLOR }}
@@ -52,6 +48,6 @@ const Tabledex = ({
       )}}
     />
   )
-}
+
 
 export default Tabledex

@@ -11,6 +11,7 @@ import {
   Card,
   List,
 } from 'antd'
+import { isMobile } from 'react-device-detect'
 
 import { findAll, deleteCharacter } from '../services/characters.mjs'
 
@@ -20,8 +21,6 @@ import {
   getSwError,
   getSwData,
 } from '../redux/selectors'
-
-import useBreakpoint from '../hooks/useBreakpoint.js'
 
 import { Tabledex, Spinner, CharacterForm } from '../components'
 import { DARK_COLOR, WHITE_COLOR } from '../global/GlobalVars'
@@ -45,7 +44,6 @@ const People = () => {
   const errorPeople = useSelector(getSwError)
   const isLoadingPeople = useSelector(getSwLoading)
   const [api, contextHolder] = notification.useNotification()
-  const breakpoint = useBreakpoint()
 
   const fetchCharactersFromDB = async () => {
     setLoading(true)
@@ -102,7 +100,6 @@ const People = () => {
   }
 
   const handleInfo = (show, id) => {
-    console.log(show, id)
     setShowInfo(show)
     let character = characters.filter(pItem => pItem.characterId === id)
     setCharacterData(character[0])
@@ -137,29 +134,13 @@ const People = () => {
   }
 
   const moreData = (
-    <div
-      style={{
-        textAlign: 'center',
-        marginTop: 12,
-        height: 32,
-        lineHeight: '32px',
-        padding: '5px',
-      }}
-    >
+    <div style={styles.buttonData}>
       <Button type="primary" disabled={people?.next === null} onClick={getMorePeople}>Siguiente</Button>
     </div>
   )
 
   const lessData = (
-    <div
-      style={{
-        textAlign: 'center',
-        marginTop: 12,
-        height: 32,
-        lineHeight: '32px',
-        padding: '5px',
-      }}
-    >
+    <div style={styles.buttonData}>
       <Button type="primary" disabled={people?.previous === null} onClick={getLessPeople}>Anterior</Button>
     </div>
   )
@@ -195,23 +176,16 @@ const People = () => {
 
   return (
     <Layout>
-    {breakpoint > 880 && (
-      <Header
-        style={{
-          position: 'sticky',
-          top: 0,
-          zIndex: 1,
-          width: '100%',
-        }}
-      >
-        <Title level={2} style={{ color: WHITE_COLOR, margin: '10px', padding: '0px', textAlign: 'center' }}>Personajes de Star Wars</Title>
+    {!isMobile && (
+      <Header style={styles.header}>
+        <Title level={2} style={styles.title}>Personajes de Star Wars</Title>
       </Header>
     )}
-      <Content style={{ padding: breakpoint > 880 ? '10px 50px' : '10px', width: breakpoint > 880 ? 'auto' : '100%', background: WHITE_COLOR }}>
-        {breakpoint <= 880 && (
+      <Content style={{ padding: !isMobile ? '10px 50px' : '10px', width: !isMobile ? 'auto' : '100%', background: WHITE_COLOR }}>
+        {isMobile && (
           <Title level={2} style={{ textAlign: 'center' }}>Personajes de Star Wars</Title>
         )}
-        <Row style={{ padding: '20px', justifyContent: 'center', alignItems: 'center' }}>
+        <Row style={styles.row}>
           <Col>
             {lessData}
           </Col>
@@ -236,7 +210,7 @@ const People = () => {
             notificationInfo={openNotificationWithIcon}  
           />}
         {!isLoadingPeople && (
-          <Row style={{ padding: '20px', justifyContent: 'center', alignItems: 'center' }}>
+          <Row style={styles.row}>
             <Col>
               {lessData}
             </Col>
@@ -253,7 +227,7 @@ const People = () => {
         footer={null}
       >
         <Card
-          cover={<div style={styles.avatarContent}><img alt={characterData?.name} src={characterData?.avatar} width={300} style={{ borderRadius: 10, margin: '10px' }}/></div>}
+          cover={<div style={styles.avatarContent}><img alt={characterData?.name} src={characterData?.avatar} width={300} style={styles.card}/></div>}
         >
           <Meta
             title={characterData?.name}
@@ -305,7 +279,35 @@ const styles = {
     padding: '15%',
     alignItems: 'center',
     justifyContent: 'center',
-  }
+  },
+  buttonData: {
+    textAlign: 'center',
+    marginTop: 12,
+    height: 32,
+    lineHeight: '32px',
+    padding: '5px',
+  },
+  header: {
+    position: 'sticky',
+    top: 0,
+    zIndex: 1,
+    width: '100%',
+  },
+  title: {
+    color: WHITE_COLOR,
+    margin: '10px',
+    padding: '0px',
+    textAlign: 'center',
+  },
+  row: {
+    padding: '20px',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  card: {
+    borderRadius: 10,
+    margin: '10px',
+  },
 }
 
 export default People

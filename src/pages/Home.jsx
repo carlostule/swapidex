@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout, Typography, Row, Col, Space } from 'antd'
+import { Layout, Row, Col, Space } from 'antd'
 
 import { CategoryCard } from '../components'
 import { WHITE_COLOR } from '../global/GlobalVars'

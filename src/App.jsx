@@ -2,40 +2,27 @@ import React from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
 import { Layout, Menu, Image } from 'antd'
 import { RocketFilled, FileTextFilled, CodeFilled } from '@ant-design/icons'
+import { isMobile } from 'react-device-detect'
 
-import useBreakpoint from './hooks/useBreakpoint'
-import { GREY_COLOR, WHITE_COLOR } from './global/GlobalVars'
+import { WHITE_COLOR } from './global/GlobalVars'
 import { Home, About, Docs, People } from './pages/index'
 import logo from './assets/sd-logo.png'
 
 import './App.css'
-import { autoBatchEnhancer } from '@reduxjs/toolkit'
 
 const { Content, Footer, Sider, Header } = Layout
 
 function App() {
-  const breakpoint = useBreakpoint()
   const options = [
     { nav: 'Inicio', icon: RocketFilled },
     { nav: 'Documentación', icon: FileTextFilled },
     { nav: 'Créditos', icon: CodeFilled },
   ]
-
-  console.log(breakpoint)
-
+  
   return (
     <Layout>
-      {breakpoint > 880 && (
-        <Sider
-          style={{
-            overflow: 'auto',
-            height: '100vh',
-            position: 'fixed',
-            left: 0,
-            top: 0,
-            bottom: 0,
-          }}
-        >
+      {!isMobile && (
+        <Sider style={styles.sider}>
           <div className="logo">
             <Image width="100%" src={logo} preview={false} />
           </div>
@@ -52,8 +39,8 @@ function App() {
           />
         </Sider>
       )}
-      <Layout style={{ marginLeft: breakpoint > 880 ? '200px' : '0px' }}>
-        {breakpoint <= 880 && (
+      <Layout style={{ marginLeft: !isMobile ? '200px' : '0px' }}>
+        {isMobile && (
           <Header>
             <div style={styles.logo}>
               <Image style={styles.imageLogo} src={logo} preview={false} /> 
@@ -71,17 +58,7 @@ function App() {
             />
           </Header>
         )}
-        <Content
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '100%',
-            height: '100%',
-            background: WHITE_COLOR,
-            overflowY: 'auto',
-          }}
-        >
+        <Content style={styles.content}>
           <Routes>
             <Route path="/" element={<Home/>} />
             <Route path="/people" element={<People />} />
@@ -89,9 +66,7 @@ function App() {
             <Route path="/about" element={<About />} />
           </Routes>
         </Content>
-        <Footer
-          style={{ position: 'fixed', bottom: 0, width: '100%' }}
-        >
+        <Footer style={styles.footer}>
           Swapidex ©2023 Desarrollado por Carlos Tule
         </Footer>
       </Layout>
@@ -100,6 +75,28 @@ function App() {
 }
 
 const styles = {
+  sider: {
+    overflow: 'auto',
+    height: '100vh',
+    position: 'fixed',
+    left: 0,
+    top: 0,
+    bottom: 0,
+  },
+  content: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+    background: WHITE_COLOR,
+    overflowY: 'auto',
+  },
+  footer: {
+    position: 'fixed',
+    bottom: 0,
+    width: '100%'
+  },
   logo: {
     float: 'left',
     width: '120px',
@@ -108,7 +105,7 @@ const styles = {
   imageLogo: {
     height: '50px',
     width: '100px',
-  }
+  },
 }
 
 export default App
